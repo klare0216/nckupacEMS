@@ -3,20 +3,24 @@
 		<title>新增社員</title> 
 	</head>
 	<body>
-		學年度:<input type="text" id="學年度"><br>
-		學號:<input type="text" id="學號"><br>
-		姓名:<input type="text" id="姓名"><br>
-		系所:<input type="text" id="系所"><br>
-		生日:<input type="text" id="生日"><br>
-		手機:<input type="text" id="手機"><br>
-		入社日期:<input type="text" id="入社日期"><br>
-		<button type="button" id="btn">送出</button>
+		學年度:(上學期F下學期S,必填)<input type="text" id="學年度"><br><br>
+		學號:(必填)<input type="text" id="學號"><br><br>
+		姓名:(必填)<input type="text" id="姓名"><br><br>
+		系所:<input type="text" id="系所"><br><br>
+		生日:(格式yyyy-MM-dd)<input type="text" id="生日"><br><br>
+		手機:<input type="text" id="手機"><br><br>
+		入社日期:(格式yyyy-MM-dd,必填)<input type="text" id="入社日期"><br><br>
+		<button type="button" id="btn">送出</button><br><br>
+		<button type="button" id="home">回社員首頁</button><br><br>
+		<p id="demo1"></p>
 
 		<script>
 			var btn = document.getElementById('btn');
+			var home = document.getElementById('home');
+			var url = "http://localhost:3000/api/member";
 			var xhr  = new XMLHttpRequest();
 
-			btn.addEventListener('click', function(e){
+			btn.addEventListener('click', function(e) {
 				var data = {};
 				data.學年度 = document.getElementById("學年度").value;
 				data.學號 = document.getElementById("學號").value;
@@ -27,18 +31,24 @@
 				data.入社日期 = document.getElementById("入社日期").value;
 				var json = JSON.stringify(data);
 				console.log(json);
-				xhr.open("POST", "http://localhost:3000/api/member", true);
+				xhr.open("POST", url, true);
 				xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
 				xhr.onload = function () {
 					var users = xhr.responseText;
 					if (xhr.readyState == 4 && xhr.status == "200") {
+						document.getElementById("demo1").innerHTML = users;
 						console.table(users);
 					} else {
+						document.getElementById("demo1").innerHTML = users;
 						console.error(users);
 					}
 				}
 				xhr.send(json);
 			}, false);
+
+			home.addEventListener('click', function(e) {
+				location.href = url + "/index";
+			});
 		</script>
 	</body> 
 </html>
