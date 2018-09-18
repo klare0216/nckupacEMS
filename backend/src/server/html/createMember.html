@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<title>新增社員</title> 
+	</head>
+	<body>
+		學年度:<input type="text" id="學年度"><br>
+		學號:<input type="text" id="學號"><br>
+		姓名:<input type="text" id="姓名"><br>
+		系所:<input type="text" id="系所"><br>
+		生日:<input type="text" id="生日"><br>
+		手機:<input type="text" id="手機"><br>
+		入社日期:<input type="text" id="入社日期"><br>
+		<button type="button" id="btn">送出</button>
+
+		<script>
+			var btn = document.getElementById('btn');
+			var xhr  = new XMLHttpRequest();
+
+			btn.addEventListener('click', function(e){
+				var data = {};
+				data.學年度 = document.getElementById("學年度").value;
+				data.學號 = document.getElementById("學號").value;
+				data.姓名 = document.getElementById("姓名").value;
+				data.系所 = document.getElementById("系所").value;
+				data.生日 = document.getElementById("生日").value;
+				data.手機 = document.getElementById("手機").value;
+				data.入社日期 = document.getElementById("入社日期").value;
+				var json = JSON.stringify(data);
+				console.log(json);
+				xhr.open("POST", "http://localhost:3000/api/member", true);
+				xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+				xhr.onload = function () {
+					var users = xhr.responseText;
+					if (xhr.readyState == 4 && xhr.status == "200") {
+						console.table(users);
+					} else {
+						console.error(users);
+					}
+				}
+				xhr.send(json);
+			}, false);
+		</script>
+	</body> 
+</html>
