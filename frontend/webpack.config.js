@@ -58,6 +58,6 @@ module.exports = {
   watchOptions: {
     poll: true
   },
-  mode: 'production',
+  mode: 'development',
   plugins: [HtmlWebpackPluginConfig],
 }
