@@ -29,8 +29,8 @@ const createMember = (insertValues) => {
 						var count;
 						count = result[0][Object.keys(result[0])[0]] + 1;
 						console.log('我在這'+count);
-
-						insertValues.社員編號='M'+insertValues['學年度']+leftPad(count,3,0);
+						
+						insertValues.社員編號 = 'M'+insertValues['學年度']+leftPad(count,3,0);
 						console.log('我在這'+insertValues['社員編號']);
 						connection.query('INSERT INTO 社員名單 SET ?', insertValues, (error, result) => { // User資料表寫入一筆資料
 							if (error) {
@@ -48,6 +48,29 @@ const createMember = (insertValues) => {
 		});
 	});
 };
+
+/*  Member GET 取得  */
+const selectMember = () => {
+	return new Promise((resolve, reject) => {
+		connectionPool.getConnection((connectionError, connection) => { // 資料庫連線
+			if (connectionError) {
+				reject(connectionError); // 若連線有問題回傳錯誤
+			} else {
+				// Member撈取所有欄位的值組
+				connection.query('SELECT * FROM 社員名單', (error, result) => {
+					if (error) {
+						console.error('SQL error: ', error);
+						reject(error); // 寫入資料庫有問題時回傳錯誤
+					} else {
+						resolve(result); // 撈取成功回傳 JSON 資料
+					}
+					connection.release();
+				});
+			}
+		});
+	});
+};
 export default {
-	createMember
+	createMember,
+	selectMember
 };
