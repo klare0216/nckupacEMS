@@ -4,10 +4,12 @@
 	</head>
 	<body>
 		<button type="button" id="add">新增</button>
+		<button type="button" id="login"">登入</button>
 		<button type="button" id="btn">取得所有名單</button>
 		<table style="width:100%" id="list"></table>
 		<script>
 			var add = document.getElementById('add');
+			var login = document.getElementById('login');
 			var btn = document.getElementById('btn');
 			var tableNode = document.getElementById('list');
 			var url = "http://localhost:3000/api/member";
@@ -15,6 +17,10 @@
 			
 			add.addEventListener('click', function(e) {
 				location.href = url + "/create";
+			});
+
+			login.addEventListener('click', function(e) {
+				location.href = url + "/login";
 			});
 
 			btn.addEventListener('click', function(e) {

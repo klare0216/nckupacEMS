@@ -18,4 +18,10 @@ router.route('/')
 	.get(memberCtrl.memberGet) /** 取得 Member 所有值組 */
 	.post(validate(paramValidation.createUser), memberCtrl.memberPost); /* 新增 Member 值組 */
 
+router.route('/login')
+	.get(function(req, res) {
+		res.sendfile(path.resolve(__dirname, '../src/server/html/login.html'));
+	})
+	.post(memberCtrl.memberLogin); /** User 登入 */
+
 export default router;

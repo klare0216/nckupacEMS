@@ -1,6 +1,7 @@
 // 跟社員相關的資料庫行為
 import mysql from 'mysql';
 import config from '../../config/config';
+import bcrypt from 'bcrypt';
 
 const leftPad = require('left-pad');
 
@@ -70,7 +71,39 @@ const selectMember = () => {
 		});
 	});
 };
+
+const selectMemberLogin = (insertValues) => {
+	return new Promise((resolve, reject) => {
+		connectionPool.getConnection((connectionError, connection) => { // 資料庫連線
+			if (connectionError) {
+				reject(connectionError); // 若連線有問題回傳錯誤
+			} else {
+				// User撈取所有欄位的值組
+				connection.query('SELECT * FROM 社員名單 WHERE 社員編號 = ?', insertValues.社員編號, (error, result) => {
+					if (error) {
+						console.error('SQL error: ', error);
+						reject(error); // 寫入資料庫有問題時回傳錯誤
+					} else if (Object.keys(result).length === 0) {
+						resolve('尚未登錄！');
+					} else {
+						const dbHashPassword = result[0].密碼; // 資料庫加密後的密碼
+						const userPassword = insertValues.密碼; // 使用者登入輸入的密碼
+						bcrypt.compare(userPassword, dbHashPassword).then((res) => { // 使用bcrypt做解密驗證
+							if (res) {
+								resolve('登入成功'); // 登入成功
+							} else {
+								resolve('您輸入的密碼有誤！'); // 登入失敗
+							}
+						});
+					}
+					connection.release();
+				});
+			}
+		});
+	});
+};
 export default {
 	createMember,
-	selectMember
+	selectMember,
+	selectMemberLogin
 };
